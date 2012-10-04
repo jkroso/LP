@@ -1,0 +1,26 @@
+{
+	"name": "LP",
+	"title": "LP",
+	"description": "Allows you to create value storage containers which notify you when the value they represent changes",
+	"version": "0.1.0",
+	"homepage": "https://github.com/jkroso/LP",
+	"author": {
+		"name": "Jakeb Rosoman",
+		"email": "jkroso@gmail.com"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/jkroso/LP.git"
+	},
+	"bugs": {
+		"url": ""
+	},
+	"licenses": [
+		{
+			"type": "MIT",
+			"url": "https://github.com/jkroso/LP/master/LICENSE-MIT"
+		}
+	],
+	"dependencies": {},
+	"keywords": []
+}

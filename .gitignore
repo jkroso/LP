@@ -1,0 +1,5 @@
+docs
+-p
+*sublime-project
+*sublime-workspace
+ignore.conf
