@@ -1,28 +1,64 @@
-define(['Observer'], function (Observer) {
+define([
+    '../../Observer/lib/Observer'
+], function (Observer) {
     Observer = Observer.constructor
+    var invokeList = Observer.invokeList
+    var collect = Observer.collect
 
     function Component (proc) {
-        var self = new Observer
-
+        if (!(this instanceof Component)) return new Component(proc)
+        Observer.call(this)
+        var self = this
         return Proxy.createFunction(
             new ProxyHandler(self, {
                 set: function (proxy, name, fn) {
-                    if ( name === 'then' || name === 'on' ) {
-                        self.on(fn)
+                    switch (name) {
+                        case 'on':
+                        case 'then':
+                            self.on(fn)
+                            break
+                        default:
+                            self.on(name, fn)
                     }
-                    return self.on(name, fn)
-                }
+                    return self
+                },
+                // get: function (proxy, name) {
+                //     return function (fn) {
+                //         switch (name) {
+                //             case 'on':
+                //             case 'then':
+                //                 self.on(fn)
+                //                 break
+                //             default:
+                //                 self.on(name, fn)
+                //         }
+                //         return proxy
+                //     }
+                // }
             }), 
             function () {
                 var result = proc.apply(this, arguments)
-                if ( result.length === 2 ) {
-                    self.publish(result[0], result[1])
-                    return result[1]
+                if ( result && result instanceof Result ) {
+                    invokeList(collect(self, result.type), result = result.value)
+                } else {
+                    self.publish(result)
                 }
-                self.publish(result)
                 return result
             }
         )
+    }
+    Component.Result = Result
+    function Result (value, type) {
+        this.value = value
+        this.type = type ? type.split(/\./) : []
+    }
+
+    Component.prototype = Object.create(Observer.prototype, {constructor:{value:Component}})
+    Component.prototype.call = Function.prototype.call
+    Component.prototype.apply = Function.prototype.apply
+
+    Component.new = function (proc) {
+        return new(this)(proc)
     }
 
     return Component
@@ -79,7 +115,7 @@ function ProxyHandler (obj, options) {
         // return true
     },  // bad behavior when set fails in non-strict mode
     this.enumerate = function() {
-        var result = [];
+        var result = []
         for (var name in obj) {
             result.push(name)
         }

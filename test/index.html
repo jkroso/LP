@@ -1,25 +1,39 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-	<meta charset="utf-8">
-	<title>Observer Test Suite</title>
-	<script src="../../jquery-latest.js"></script>
-	<script src="qunit/qunit.js"></script>
-	<link rel="stylesheet" href="qunit/qunit.css" media="screen">
-	<script src='http://localhost/Libraries/requirejs/require.js'></script>
-	<script src='http://localhost/Libraries/Observer/dist/Observer.js'></script>
-</head>
-<body>
-	<h1 id="qunit-header">Observer Test Suite</h1>
-	<h2 id="qunit-banner"></h2>
-	<div id="qunit-testrunner-toolbar"></div>
-	<h2 id="qunit-userAgent"></h2>
-	<ol id="qunit-tests"></ol>
-	<div id="qunit-fixture">
-		<span>lame test markup</span>
-		<span>normal test markup</span>
-		<span>awesome test markup</span>
-	</div>
-	<script src='LP_test.js' defer></script>
-</body>
+    <head>
+        <title>Component</title>
+        <link rel="stylesheet" href="vendor/mocha.css" />
+        <script type="text/javascript">
+            var require = {
+                shim : {
+                    mocha : {
+                        exports : 'mocha'
+                    },
+                    chai : {
+                        exports : 'chai'
+                    }
+                },
+                paths: {
+                    mocha: 'vendor/mocha',
+                    chai: 'vendor/chai',
+                }
+            }
+        </script>
+        <script src="vendor/require.js"></script>
+        <script type="text/javascript">
+            require(['require', 'mocha', 'chai'], function (require, mocha, chai) {
+                window.should = chai.Should()
+                window.expect = chai.expect
+
+                mocha.setup('bdd')
+                
+                require(['LP.test'], function () {
+                    mocha.run()
+                })
+            })
+        </script>
+    </head>
+    <body>
+        <div id="mocha"></div>
+    </body>
 </html>

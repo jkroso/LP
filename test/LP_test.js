@@ -70,10 +70,7 @@ require(['../src/Component', 'Observer'], function (Component, Observer) {
     test('Can disconnect a pin or one of its subscriptions', function () {
         expect(3)
         var is = new Component(function(data){
-            if (data) {
-                return ['true', data]
-            }
-            return ['false', data]
+            return [Boolean(data).toString(), data]
         })
         var sub = is.true = function (d) {
             console.log(d)
